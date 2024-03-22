@@ -7,13 +7,12 @@ function App() {
   const [animeList, SetAnimeList] = useState([]);
   const [topAnime, SetTopAnime] = useState([]);
   const [search, SetSearch] = useState("");
+  const BASE_URL = "https://api.jikan.moe/v4";
 
   const GetTopAnime = async () => {
-    const temp = await fetch(
-      `https://api.jikan.moe/v3/top/anime/1/bypopularity`
-    ).then((res) => res.json());
-
-    SetTopAnime(temp.top.slice(0, 5));
+    let url = `${BASE_URL}/top/anime?filter=bypopularity&limit=20`;
+    const results = await fetch(url).then((res) => res.json());
+    SetTopAnime(results.data.slice(0, 5));
   };
 
   const HandleSearch = (e) => {
@@ -23,11 +22,9 @@ function App() {
   };
 
   const FetchAnime = async (query) => {
-    const temp = await fetch(
-      `https://api.jikan.moe/v3/search/anime?q=${query}&order_by=title&sort=asc&limit=10`
-    ).then((res) => res.json());
-
-    SetAnimeList(temp.results);
+    let url = `${BASE_URL}/anime?q=${query}&order_by=title&sort=asc&limit=10`;
+    const results = await fetch(url).then((res) => res.json());
+    SetAnimeList(results.data);
   };
 
   useEffect(() => {
